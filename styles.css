@@ -1,7 +1,8 @@
+/*this is the main grid logic that creates the calendar structure*/
 .calendar {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: repeat(7, 1fr); /*divides columns into 7 equal fractions*/
+    grid-template-rows: repeat(5, 1fr);    /*divides rows into 5 equal fractions*/
 }
 
 .weekdays {
@@ -9,8 +10,10 @@
     text-align: center;
 }
 
-.first-day {
-  grid-column-start: 2;
+/*this decides which day of the week it starts with.
+change this in the JS based on the current month*/
+#first-day {
+  grid-column-start: 4;
 }
 
 .day {
@@ -20,10 +23,7 @@
     min-height: 100px;
 }
 
-li {
-    list-style-type: none;
-}
-
+/*month display*/
 .month {
   padding: 25px 25px;
   width: 100%;
@@ -36,6 +36,7 @@ li {
   letter-spacing: 3px;
 }
 
+
 .month .prev {
   float: left;
   padding-top: 10px;
@@ -44,4 +45,8 @@ li {
 .month .next {
   float: right;
   padding-top: 10px;
+}
+
+li {
+    list-style-type: none;
 }
