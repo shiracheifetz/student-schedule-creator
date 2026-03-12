@@ -1,0 +1,47 @@
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+}
+
+.weekdays {
+    background-color: #eee;
+    text-align: center;
+}
+
+.first-day {
+  grid-column-start: 2;
+}
+
+.day {
+    padding: 20px;
+    border: 1px solid #ccc;
+    text-align: left;
+    min-height: 100px;
+}
+
+li {
+    list-style-type: none;
+}
+
+.month {
+  padding: 25px 25px;
+  width: 100%;
+  text-align: center;
+}
+
+.month ul li {
+  font-size: 45px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.month .prev {
+  float: left;
+  padding-top: 10px;
+}
+
+.month .next {
+  float: right;
+  padding-top: 10px;
+}
