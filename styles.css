@@ -1,0 +1,141 @@
+/* Page */
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background:white;
+    color:#444;
+}
+
+/* Header */
+header{
+    text-align:center;
+    padding:25px;
+    background:#ffd6ec;
+    border-bottom:3px solid #bde0fe;
+}
+
+header h1{
+    color:#ff6fa5;
+    font-size:2.4rem;
+}
+
+/* Layout */
+main{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    padding:40px;
+    flex-wrap:wrap;
+}
+
+/* Containers */
+.form-container,
+.calendar-container{
+    background:#f9fbff;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Form title */
+form h2{
+    margin-bottom:15px;
+    color:#6fa8ff;
+}
+
+/* Form fields */
+.form-group{
+    margin-bottom:15px;
+    display:flex;
+    flex-direction:column;
+}
+
+label{
+    margin-bottom:5px;
+    font-size:0.9rem;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="time"]{
+    padding:8px;
+    border-radius:6px;
+    border:1px solid #d6e6ff;
+    background:white;
+}
+
+input:focus{
+    outline:none;
+    border-color:#ff9ecf;
+}
+
+/* Checkbox grid */
+.checkbox-group{
+    display:grid;
+    grid-template-columns:repeat(2,auto);
+    gap:6px 15px;
+}
+
+/* Button */
+button{
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    background:#ff9ecf;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#6fa8ff;
+}
+
+/* Calendar */
+.calendar-container{
+    width:320px;
+}
+
+/* Month header */
+.month ul{
+    list-style:none;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+    color:#ff6fa5;
+    font-weight:bold;
+}
+
+/* Weekdays */
+.weekdays{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    margin-bottom:10px;
+}
+
+.weekday{
+    text-align:center;
+    color:#6fa8ff;
+    font-weight:bold;
+}
+
+.days{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:6px;
+    list-style:none;
+}
+
+.day{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:40px;
+    border-radius:6px;
+    background:white;
+    border:1px solid #e6ecff;
+}
+
+.day:hover{
+    background:#ffd6ec;
+}
