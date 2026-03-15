@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    height: 100vh;
+    height: 100%;
     margin: 0;
     background-color: #f4f4f9;
 }
@@ -15,7 +15,7 @@ body {
   width: 400px;
   background-color: #f1f1f1;
   height: 100%; 
-  position: fixed; 
+  
   overflow: auto; 
 }
 
@@ -63,8 +63,23 @@ button:hover {
     display: none;
 }
 
-.checkbox-group{
+.checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+}
+
+
+.checkbox-group label {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    align-items: center;
+    gap: 8px; 
+    margin-bottom: 0; 
+    cursor: pointer;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column; 
+    gap: 10px;
 }
