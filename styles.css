@@ -5,6 +5,8 @@ body {
     background-color: #f4f4f9;
 }
 
+
+/* FORM STYLING */
 .form-container {
   border-radius: 16px;
   border: 1px solid #e4e4e4;
@@ -82,4 +84,60 @@ button:hover {
     display: flex;
     flex-direction: column; 
     gap: 10px;
+}
+
+
+
+/* CALENDAR STYLING */
+.calendar {
+  /*this is the main grid logic that creates the calendar structure*/
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /*divides columns into 7 equal fractions*/
+    grid-template-rows: repeat(5, 1fr);    /*divides rows into 5 equal fractions*/
+}
+
+.weekdays {
+    background-color: #eee;
+    text-align: center;
+}
+
+/*this decides which day of the week it starts with.
+change this in the JS based on the current month*/
+#first-day {
+  grid-column-start: 4;
+}
+
+.day {
+    padding: 5px;
+    border: 1px solid #ccc;
+    text-align: left;
+    min-height: 100px;
+}
+
+/*month display*/
+.month {
+  padding: 25px 25px;
+  width: 100%;
+  text-align: center;
+}
+
+.month ul li {
+  font-size: 45px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+
+.month .prev {
+  float: left;
+  padding-top: 10px;
+}
+
+.month .next {
+  float: right;
+  padding-top: 10px;
+}
+
+li {
+    list-style-type: none;
 }
