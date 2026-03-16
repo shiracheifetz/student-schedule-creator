@@ -12,14 +12,109 @@
         <h1>Student Schedule</h1>
     </header>
     <main>
-        <div>
-            <h2>Weekly Calender</h2>
-        </div>
+        <div class="main-area">
+            <div class="form-container">
+                <h2>Add a course</h2>
+                <form id="addCourseForm">
+                    <div class="form-group">
+                        <label for="coursename">Course name: </label>
+                        <input type="text" id="coursename" name="coursename">
+                        <small class="error-message" id="coursenameError"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="teacher">Teacher: </label>
+                        <input type="text" id="teacher" name="teacher">
+                        <small class="error-message" id="teacherError"></small>
+                    </div>
+                    <div class="form-group">
+                        <p>Course Day: </p>
+                        <div class="checkbox-group">
+                        <label><input type="checkbox" id="sunday" name="sunday" value="sunday">Sunday</label><br>
 
-        <form>
-            <h2>Add a course</h2>
-        </form>
-        
+                        <label><input type="checkbox" id="monday" name="monday" value="monday">Monday</label><br>
+                        
+                        <label><input type="checkbox" id="tuesday" name="tuesday" value="tuesday">Tuesday</label><br>
+                        
+                        <label><input type="checkbox" id="wednesday" name="wednesday" value="wednesday">Wednesday </label><br>
+                        
+                        <label><input type="checkbox" id="thursday" name="thursday" value="thursday">Thursday</label><br>
+
+                        <label><input type="checkbox" id="friday" name="friday" value="friday">Friday</label><br>
+                        </div>        
+                    </div>
+
+                    <div class="form-group">
+                        <p>Course times: </p>
+                        <label for="startTime">Start time: </label>
+                        <input type="time" id="startTime" name="startTime">
+                        <small class="error-message" id="startTimeError"></small>
+
+                        <label for="endTime">End time: </label>
+                        <input type="time" id="endTime" name="endTime">
+                        <small class="error-message" id="endTimeError"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit">Add Course</button>
+                    </div>
+                </form>
+            </div>
+            
+
+            <div class="calendar-container">
+                <div class="month">
+                    <ul>
+                        <li class="prev">&#10094;</li>
+                        <li>August 2026</li>
+                        <li class="next">&#10095;</li>
+                    </ul>
+                </div>
+                <ul class="weekdays calendar">
+                    <li class="weekday">Sun</li>
+                    <li class="weekday">Mon</li>
+                    <li class="weekday">Tue</li>
+                    <li class="weekday">Wed</li>
+                    <li class="weekday">Thu</li>
+                    <li class="weekday">Fri</li>
+                    <li class="weekday">Sat</li>
+                </ul>
+                <ol class="days calendar">
+                    <li class="day" id="first-day">1</li>
+                    <li class="day">2</li>
+                    <li class="day">3</li>
+                    <li class="day">4</li>
+                    <li class="day">5</li>
+                    <li class="day">6</li>
+                    <li class="day">7</li>
+                    <li class="day">8</li>
+                    <li class="day">9</li>
+                    <li class="day">10</li>
+                    <li class="day">11</li>
+                    <li class="day">12</li>
+                    <li class="day">13</li>
+                    <li class="day">14</li>
+                    <li class="day">15</li>
+                    <li class="day">16</li>
+                    <li class="day">17</li>
+                    <li class="day">18</li>
+                    <li class="day">19</li>
+                    <li class="day">20</li>
+                    <li class="day">21</li>
+                    <li class="day">22</li>
+                    <li class="day">23</li>
+                    <li class="day">23</li>
+                    <li class="day">24</li>
+                    <li class="day">25</li>
+                    <li class="day">26</li>
+                    <li class="day">27</li>
+                    <li class="day">28</li>
+                    <li class="day">29</li>
+                    <li class="day">30</li>
+                    <li class="day">31</li>
+                </ol>
+            </div>
+    </div>
+
     </main>
     <script src="script.js"></script>
 </body>
