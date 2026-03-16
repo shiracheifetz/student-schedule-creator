@@ -1,3 +1,10 @@
+/* Reset list dots */
+ul, ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
 /* Page */
 body{
     font-family: Arial, Helvetica, sans-serif;
@@ -23,9 +30,9 @@ header h1{
 main{
     display:flex;
     justify-content:center;
+    align-items:flex-start;
     gap:40px;
     padding:40px;
-    flex-wrap:wrap;
 }
 
 /* Containers */
@@ -34,7 +41,17 @@ main{
     background:#f9fbff;
     padding:25px;
     border-radius:12px;
-    box-shadow:0 4px 12px rgba(0, 0.08);
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Form width */
+.form-container{
+    width:300px;
+}
+
+/* Calendar width */
+.calendar-container{
+    width:400px;
 }
 
 /* Form title */
@@ -81,12 +98,6 @@ input:focus{
     display:flex;
     align-items:center;
     gap:8px;
-    cursor:pointer;
-}
-
-.checkbox-group input[type="checkbox"]{
-    width:auto;
-    cursor:pointer;
 }
 
 /* Button */
@@ -98,32 +109,21 @@ button{
     color:white;
     font-weight:bold;
     cursor:pointer;
-    transition:all 0.2s ease;
+    transition:0.2s;
 }
 
 button:hover{
     background:#6fa8ff;
 }
 
-/* Calendar container */
-.calendar-container{
-    width:320px;
-}
-
 /* Month header */
 .month ul{
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    color: #ff6fa5;
-    font-weight: bold;
-    padding: 0;
-}
-
-.month ul li{
-    font-size:1.1rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+    color:#ff6fa5;
+    font-weight:bold;
 }
 
 .month .prev,
@@ -134,7 +134,7 @@ button:hover{
 /* Weekdays */
 .weekdays{
     display:grid;
-    grid-template-columns:repeat(7, 1fr);
+    grid-template-columns:repeat(7,1fr);
     margin-bottom:10px;
 }
 
@@ -144,28 +144,23 @@ button:hover{
     font-weight:bold;
 }
 
-/* Days */
+/* days */
 .days{
     display:grid;
-    grid-template-columns:repeat(7, 1fr);
+    grid-template-columns:repeat(7,1fr);
     gap:6px;
-    list-style:none;
-    padding:0;
 }
 
 .day{
     display:flex;
     justify-content:center;
     align-items:center;
-    height:40px;
+    height:45px;
     border-radius:6px;
     background:white;
     border:1px solid #e6ecff;
-    text-align:center;
-    padding:5px;
-    min-height:80px;
     cursor:pointer;
-    transition:background 0.2s ease;
+    transition:0.2s;
 }
 
 .day:hover{
@@ -173,6 +168,6 @@ button:hover{
 }
 
 /* First day placeholder */
-#first-day {
-    grid-column-start: 4; 
+#first-day{
+    grid-column-start:4;
 }
