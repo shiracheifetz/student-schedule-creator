@@ -54,7 +54,7 @@ main{
 
 /* Fixed Calendar width */
 .calendar-container{
-    flex:0 0 450px;
+    flex: 1;
 }
 
 /* Form title */
@@ -120,18 +120,14 @@ button:hover{
 }
 
 /* Month header */
-.month ul{
-    display:flex;
+.month{
     justify-content:space-between;
+    text-align: center;
+    font-size: 30px;
     align-items:center;
     margin-bottom:15px;
     color:#ff6fa5;
     font-weight:bold;
-}
-
-.month .prev,
-.month .next{
-    cursor:pointer;
 }
 
 /* Weekdays */
@@ -151,15 +147,15 @@ button:hover{
 .days{
     display:grid;
     grid-template-columns:repeat(7,1fr);
-    gap:6px;
+    gap: 10px;
 }
 
 .day{
     display:flex;
     justify-content:center;
     align-items:center;
-    height:45px;
-    border-radius:6px;
+    height:400px;
+    border-radius:15px;
     background:white;
     border:1px solid #e6ecff;
     cursor:pointer;
