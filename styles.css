@@ -171,6 +171,11 @@ button:hover{
     grid-column-start:4;
 }
 
+.courseDropdown,#courseDetailDropdown{
+    min-width: 10px;
+    padding: 10px;
+}
+
 /* Applied when two classes overlap */
 .conflicting {
     border-color: red;

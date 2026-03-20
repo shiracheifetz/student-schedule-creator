@@ -8,23 +8,27 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("current: ",courseList);
 
     //providing the initial course dropdown
-        const dropdowns = document.getElementsByClassName('courseDropdown');
-        Array.from(dropdowns).forEach(dropdown => {
-        courseList.forEach(course => {
-            let opt = new Option(course.coursename, course.coursename);
-            dropdown.add(opt);
-        });
-        });
+        if (courseList.length!==0){
+            const dropdowns = document.getElementsByClassName('courseDropdown');
+            Array.from(dropdowns).forEach(dropdown => {
+            courseList.forEach(course => {
+                let opt = new Option(course.coursename, course.coursename);
+                dropdown.add(opt);
+                console.log("set up initial course dropdown")
+            });
+            });
+        }
+        //create placeholder if there are no courses
+        else{
+            const dropdowns = document.getElementsByClassName('courseDropdown');
+            Array.from(dropdowns).forEach(dropdown => {
+            const placeholder = document.createElement('option');
+            placeholder.text = "Not currently enrolled in any courses";
+            dropdown.prepend(placeholder);
+            console.log("entered else becuase course list is empty")
+            }); 
+        }
 
-    //providing the initial edit course details dropdown
-        let detailList=['Course Name','Teacher','Day','Start Time','End Time'];
-        const courseDetailDropdown = document.getElementById('courseDetailDropdown');
-        detailList.forEach(detail => {
-        let opt = new Option(detail,detail);
-        courseDetailDropdown.add(opt);
-    });  
-
-    
 
     const form = document.getElementById('courseForm');
     
@@ -106,9 +110,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function display() {
 
-        //providing the updated course dropdown
-        const detailDropdown = document.getElementById('courseDetailDropdown');
-        detailDropdown.options.length = 0; 
+
+    //providing the updated course dropdown
         const courseDropdowns = document.getElementsByClassName('courseDropdown');
         Array.from(courseDropdowns).forEach(dropdown => {
             dropdown.options.length = 0; 
@@ -117,14 +120,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 let opt = new Option(course.coursename, course.coursename);
                 dropdown.add(opt);
             });
-        });
-
-        //providing the updated edit course details dropdown
-        let detailList=['Course Name','Teacher','Day','Start Time','End Time'];
-        const courseDetailDropdown = document.getElementById('courseDetailDropdown');
-        detailList.forEach(detail => {
-        let opt = new Option(detail,detail);
-        courseDetailDropdown.add(opt);
         });
     }
 
