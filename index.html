@@ -70,11 +70,21 @@
 
                     <!--edit course-->
                     <h2>Edit a Course</h2>
-                    <label for="courses">Choose the course you would like to edit:</label>
-                    <select class="courseDropdown"></select>
-                    <label for="courseDetail">Choose the course detail you would like to edit:</label>
-                    <select id="courseDetailDropdown"></select>
-                    
+                    <div class="form-group">
+                        <label for="courses">Choose the course you would like to edit:</label>
+                        <select class="courseDropdown"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="courseDetail">Choose the course detail you would like to edit:</label>
+                        <select id="courseDetailDropdown">
+                            <option>Course Name</option>
+                            <option>Teacher</option>
+                            <option>Day</option>
+                            <option>Start Time</option>
+                            <option>End Time</option>
+                        </select>
+                    </div>
+
                     <div class="form-group">
                         <label for="edit">New Information: </label>
                         <input type="text" id="edit" name="edit">

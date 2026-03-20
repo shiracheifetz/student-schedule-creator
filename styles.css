@@ -170,3 +170,10 @@ button:hover{
 #first-day{
     grid-column-start:4;
 }
+
+.courseDropdown,#courseDetailDropdown{
+    min-width: 10px;
+    padding: 10px;
+}
+
+
