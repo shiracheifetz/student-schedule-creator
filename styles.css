@@ -174,3 +174,8 @@ button:hover{
 #first-day{
     grid-column-start:4;
 }
+
+/* Applied when two classes overlap */
+.conflicting {
+    border-color: red;
+}

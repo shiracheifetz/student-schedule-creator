@@ -49,5 +49,21 @@ document.addEventListener("DOMContentLoaded", () => {
         //function logic
     }
 
+
+    function highlightConflicts() 
+        {const sortedCourses = courseList.toSorted((a, b) => a.startTime.localeCompare(b.startTime));
+        const conflicts = [];
+        for (let i = 1; i < sortedCourses.length; i++) {
+            const current = sortedCourses[i];
+            const previous = sortedCourses[i - 1];
+            // check if this course starts before the previous one ends
+            if ((current.day == previous.day) && (current.startTime < previous.endTime)) {
+                conflicts.push(current, previous);
+            }
+        }
+        conflicts.forEach((course) => {
+            course.classList.append("conflicting");
+        })
+    }
     
 });
