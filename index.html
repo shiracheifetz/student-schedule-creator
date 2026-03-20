@@ -46,11 +46,11 @@
                     <div class="form-group">
                         <p>Course times: </p>
                         <label for="starttime">Start time: </label>
-                        <input type="time" id="starttime" name="starttime">
+                        <input type="time" id="starttime" name="starttime" required>
                         <small class="error-message" id="startTimeError"></small>
 
                         <label for="endtime">End time: </label>
-                        <input type="time" id="endtime" name="endtime">
+                        <input type="time" id="endtime" name="endtime" required>
                         <small class="error-message" id="endTimeError"></small>
                     </div>
 
@@ -65,7 +65,7 @@
                         <select class="courseDropdown"></select>
                     </div>
                     <div class="form-group">
-                        <button type="submit" id="deleteBtn">Delete</button>
+                        <button type="submit" id="deleteBtn" formnovalidate>Delete</button>
                     </div>
 
                     <!--edit course-->
@@ -81,7 +81,7 @@
                         <small class="error-message" id="editError"></small>
                     </div>
                     <div class="form-group">
-                        <button type="submit" id="editBtn">Update</button>
+                        <button type="submit" id="editBtn" formnovalidate>Update</button>
                     </div>
                 </form>
             </div>

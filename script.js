@@ -99,52 +99,51 @@ document.addEventListener("DOMContentLoaded", () => {
     function saveAndRender() {
         localStorage.setItem("myCourses", JSON.stringify(courseList));
         console.log("Current List:", courseList);
+        highlightConflicts();
         display(); 
     }
 
 
     function display() {
 
-    //providing the updated course dropdown
+        //providing the updated course dropdown
         const detailDropdown = document.getElementById('courseDetailDropdown');
         detailDropdown.options.length = 0; 
         const courseDropdowns = document.getElementsByClassName('courseDropdown');
         Array.from(courseDropdowns).forEach(dropdown => {
-        dropdown.options.length = 0; 
-        // Repopulate with the current course list
-        courseList.forEach(course => {
-            let opt = new Option(course.coursename, course.coursename);
-            dropdown.add(opt);
-        });
+            dropdown.options.length = 0; 
+            // Repopulate with the current course list
+            courseList.forEach(course => {
+                let opt = new Option(course.coursename, course.coursename);
+                dropdown.add(opt);
+            });
         });
 
-    //providing the updated edit course details dropdown
+        //providing the updated edit course details dropdown
         let detailList=['Course Name','Teacher','Day','Start Time','End Time'];
         const courseDetailDropdown = document.getElementById('courseDetailDropdown');
         detailList.forEach(detail => {
         let opt = new Option(detail,detail);
         courseDetailDropdown.add(opt);
         });
-    
-    
-        //function logic
     }
 
 
-    function highlightConflicts() 
-        {const sortedCourses = courseList.toSorted((a, b) => a.startTime.localeCompare(b.startTime));
+    function highlightConflicts() {
+        const sortedCourses = courseList.toSorted((a, b) => a.starttime.localeCompare(b.starttime));
         const conflicts = [];
         for (let i = 1; i < sortedCourses.length; i++) {
             const current = sortedCourses[i];
             const previous = sortedCourses[i - 1];
             // check if this course starts before the previous one ends
-            if ((current.day == previous.day) && (current.startTime < previous.endTime)) {
+            if ((current.day == previous.day) && (current.starttime < previous.endtime)) {
                 conflicts.push(current, previous);
             }
         }
-        conflicts.forEach((course) => {
-            course.classList.append("conflicting");
-        })
+        // conflicts.forEach((course) => {
+        //     course.classList.append("conflicting");
+        // })
+        console.log("conflicting courses: ", conflicts)
     }
     
 });
