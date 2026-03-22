@@ -29,17 +29,17 @@
                     <div class="form-group">
                         <p>Course Day: </p>
                         <div class="checkbox-group" id="day">
-                        <label><input type="checkbox"  name="day" value="sunday">Sunday</label><br>
+                        <label><input type="checkbox"  name="day" value="sunday">Sunday</label>
 
-                        <label><input type="checkbox"  name="day" value="monday">Monday</label><br>
+                        <label><input type="checkbox"  name="day" value="monday">Monday</label>
                         
-                        <label><input type="checkbox"  name="day" value="tuesday">Tuesday</label><br>
+                        <label><input type="checkbox"  name="day" value="tuesday">Tuesday</label>
                         
-                        <label><input type="checkbox"  name="day" value="wednesday">Wednesday </label><br>
+                        <label><input type="checkbox"  name="day" value="wednesday">Wednesday </label>
                         
-                        <label><input type="checkbox"  name="day" value="thursday">Thursday</label><br>
+                        <label><input type="checkbox"  name="day" value="thursday">Thursday</label>
 
-                        <label><input type="checkbox"  name="day" value="friday">Friday</label><br>
+                        <label><input type="checkbox"  name="day" value="friday">Friday</label>
                         </div>        
                     </div>
 
@@ -62,7 +62,7 @@
                     <h2>Delete a Course</h2>
                     <div class="form-group">
                         <label for="courses">Choose the course you would like to remove:</label>
-                        <select class="courseDropdown"></select>
+                        <select id="courses" class="courseDropdown"></select>
                     </div>
                     <div class="form-group">
                         <button type="submit" id="deleteBtn" formnovalidate>Delete</button>
@@ -72,10 +72,10 @@
                     <h2>Edit a Course</h2>
                     <div class="form-group">
                         <label for="courses">Choose the course you would like to edit:</label>
-                        <select class="courseDropdown"></select>
+                        <select id="courses" class="courseDropdown"></select>
                     </div>
                     <div class="form-group">
-                        <label for="courseDetail">Choose the course detail you would like to edit:</label>
+                        <label for="courseDetailDropdown">Choose the course detail you would like to edit:</label>
                         <select id="courseDetailDropdown">
                             <option>Course Name</option>
                             <option>Teacher</option>

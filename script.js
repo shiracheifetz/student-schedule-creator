@@ -85,6 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         saveAndRender(); 
+        editInput.value = '';
         console.log("Updated course list:", courseList);
     }
         
@@ -109,8 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     function display() {
-
-
     //providing the updated course dropdown
         const courseDropdowns = document.getElementsByClassName('courseDropdown');
         Array.from(courseDropdowns).forEach(dropdown => {
@@ -140,5 +139,16 @@ document.addEventListener("DOMContentLoaded", () => {
         // })
         console.log("conflicting courses: ", conflicts)
     }
+
+    document.getElementById('courseDetailDropdown').addEventListener('change', function() {
+        const editInput = document.getElementById('edit');
+        const prop = this.value.toLowerCase().replace(/\s+/g, '');
+        
+        if (prop === 'starttime' || prop === 'endtime') {
+            editInput.type = 'time';
+        } else {
+            editInput.type = 'text';
+        }
+    });
     
 });
