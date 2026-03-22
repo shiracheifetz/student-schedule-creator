@@ -1,9 +1,9 @@
-
 document.addEventListener("DOMContentLoaded", () => {
-    
+    const detailList = ["Course Name", "Teacher", "Day", "Start Time", "End Time"];
+
     // get saved list
     const saved = localStorage.getItem("myCourses");
-    let courseList = saved ? JSON.parse(saved) : [];
+    let courseList = saved ? JSON.parse(saved).map(normalizeCourse) : [];
     console.log("saved: ",saved);
     console.log("current: ",courseList);
 
@@ -36,9 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
         form.addEventListener('submit', function(e) {
             e.preventDefault(); 
 
-            // Create course object from form
             const formData = new FormData(this);
-            const courseObject = Object.fromEntries(formData.entries());
+            const courseObject = buildCourseFromForm(formData);
             
             // Identify which button was clicked
             const clickedButton = e.submitter.id;
@@ -110,17 +109,94 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     function display() {
+        clearCalendar();
+
     //providing the updated course dropdown
+        const detailDropdown = document.getElementById('courseDetailDropdown');
+        detailDropdown.options.length = 0; 
         const courseDropdowns = document.getElementsByClassName('courseDropdown');
         Array.from(courseDropdowns).forEach(dropdown => {
-            dropdown.options.length = 0; 
-            // Repopulate with the current course list
-            courseList.forEach(course => {
-                let opt = new Option(course.coursename, course.coursename);
-                dropdown.add(opt);
+        dropdown.options.length = 0; 
+        // Repopulate with the current course list
+        courseList.forEach(course => {
+            let opt = new Option(course.coursename, course.coursename);
+            dropdown.add(opt);
+
+            });
+        });
+
+//course details dropdown
+        const courseDetailDropdown = document.getElementById('courseDetailDropdown');
+        detailList.forEach(detail => {
+        let opt = new Option(detail,detail);
+        courseDetailDropdown.add(opt);
+        });
+
+        courseList.forEach(course => {
+            normalizeDays(course.day).forEach(day => {
+                //day matches the data-day attribute in the calendar
+                const dayElement = document.querySelector(`.day[data-day="${day}"]`);
+                
+                if (dayElement) {
+                    //course card for the schedule display
+                    const courseCard = document.createElement('div');
+                    courseCard.className = 'course-card';
+                    courseCard.innerHTML = `
+                        <strong>${course.coursename}</strong><br>
+                        ${course.teacher}<br>
+                        ${course.starttime} - ${course.endtime}
+                    `;
+
+                    // assign correct day to the course card    
+                    dayElement.appendChild(courseCard);
+                }
             });
         });
     }
+
+    function buildCourseFromForm(formData) {
+        const courseObject = Object.fromEntries(formData.entries());
+        courseObject.day = formData.getAll("day");
+        return normalizeCourse(courseObject);
+    }
+
+    function normalizeCourse(course) {
+        return {
+            ...course,
+            starttime: course.starttime ?? course.startTime ?? "",
+            endtime: course.endtime ?? course.endTime ?? "",
+            day: normalizeDays(course.day)
+        };
+    }
+
+    function normalizeDays(days) {
+        if (Array.isArray(days)) {
+            return days
+                .map(day => String(day).trim().toLowerCase())
+                .filter(Boolean);
+        }
+
+        if (typeof days === "string") {
+            return parseDays(days);
+        }
+
+        return [];
+    }
+
+    function parseDays(dayString) {
+        return dayString
+            .split(",")
+            .map(day => day.trim().toLowerCase())
+            .filter(Boolean);
+    }
+
+    function clearCalendar() {
+        document.querySelectorAll(".day").forEach(dayElement => {
+            dayElement.querySelectorAll(".course-card").forEach(card => card.remove());
+        });
+    }
+
+    display();
 
 
     function highlightConflicts() {
