@@ -103,8 +103,8 @@ document.addEventListener("DOMContentLoaded", () => {
     function saveAndRender() {
         localStorage.setItem("myCourses", JSON.stringify(courseList));
         console.log("Current List:", courseList);
-        highlightConflicts();
         display(); 
+        highlightConflicts();
     }
 
 
@@ -125,11 +125,11 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
-//course details dropdown
+        //course details dropdown
         const courseDetailDropdown = document.getElementById('courseDetailDropdown');
         detailList.forEach(detail => {
-        let opt = new Option(detail,detail);
-        courseDetailDropdown.add(opt);
+            let opt = new Option(detail,detail);
+            courseDetailDropdown.add(opt);
         });
 
         courseList.forEach(course => {
@@ -200,19 +200,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     function highlightConflicts() {
+        const cards = document.querySelectorAll('.course-card');
+        cards.forEach((card) => {
+            card.classList.remove("conflicting");
+        });
         const sortedCourses = courseList.toSorted((a, b) => a.starttime.localeCompare(b.starttime));
         const conflicts = [];
         for (let i = 1; i < sortedCourses.length; i++) {
             const current = sortedCourses[i];
             const previous = sortedCourses[i - 1];
             // check if this course starts before the previous one ends
-            if ((current.day == previous.day) && (current.starttime < previous.endtime)) {
+            const sharedDay = current.day.some(d => previous.day.includes(d));
+            if (sharedDay && (current.starttime < previous.endtime)) {
                 conflicts.push(current, previous);
             }
-        }
-        // conflicts.forEach((course) => {
-        //     course.classList.append("conflicting");
-        // })
+        } 
+        conflicts.forEach(course => {
+            // Find all cards with this course name
+            cards.forEach(card => {
+                if (card.querySelector('strong').textContent.trim() === course.coursename.trim()) {
+                    card.classList.add('conflicting');
+                }
+            });
+        });
         console.log("conflicting courses: ", conflicts)
     }
 
