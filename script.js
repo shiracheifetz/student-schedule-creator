@@ -8,15 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("current: ",courseList);
 
     //providing the initial course dropdown
-        if (courseList.length!==0){
-            const dropdowns = document.getElementsByClassName('courseDropdown');
-            Array.from(dropdowns).forEach(dropdown => {
-            courseList.forEach(course => {
-                let opt = new Option(course.coursename, course.coursename);
-                dropdown.add(opt);
-                console.log("set up initial course dropdown")
-            });
-            });
+        if (courseList.length > 0){
+            display(); 
         }
         //create placeholder if there are no courses
         else{
@@ -104,14 +97,13 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("myCourses", JSON.stringify(courseList));
         console.log("Current List:", courseList);
         display(); 
-        highlightConflicts();
     }
 
 
     function display() {
         clearCalendar();
 
-    //providing the updated course dropdown
+        //providing the updated course dropdown
         const detailDropdown = document.getElementById('courseDetailDropdown');
         detailDropdown.options.length = 0; 
         const courseDropdowns = document.getElementsByClassName('courseDropdown');
@@ -121,7 +113,6 @@ document.addEventListener("DOMContentLoaded", () => {
         courseList.forEach(course => {
             let opt = new Option(course.coursename, course.coursename);
             dropdown.add(opt);
-
             });
         });
 
@@ -132,6 +123,8 @@ document.addEventListener("DOMContentLoaded", () => {
             courseDetailDropdown.add(opt);
         });
 
+        checkConflicts();
+
         courseList.forEach(course => {
             normalizeDays(course.day).forEach(day => {
                 //day matches the data-day attribute in the calendar
@@ -140,11 +133,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (dayElement) {
                     //course card for the schedule display
                     const courseCard = document.createElement('div');
-                    courseCard.className = 'course-card';
+                    //check if timing conflicts, highlight conflicting
+                    courseCard.className = `course-card ${course.isConflicting ? 'conflicting' : ''}`;
+
                     courseCard.innerHTML = `
                         <strong>${course.coursename}</strong><br>
                         ${course.teacher}<br>
-                        ${course.starttime} - ${course.endtime}
+                        ${formatTime(course.starttime)} - ${formatTime(course.endtime)}
                     `;
 
                     // assign correct day to the course card    
@@ -199,31 +194,35 @@ document.addEventListener("DOMContentLoaded", () => {
     display();
 
 
-    function highlightConflicts() {
-        const cards = document.querySelectorAll('.course-card');
-        cards.forEach((card) => {
-            card.classList.remove("conflicting");
-        });
+    function formatTime(timeString) {
+        if (!timeString) return "";
+        
+        // split army time into array holding hours and minutes
+        let [hours, minutes] = timeString.split(':');
+        hours = parseInt(hours);
+        
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        
+        // Convert 
+        hours = hours % 12;
+        hours = hours ? hours : 12; // if hour is 0, make it 12
+        
+        return `${hours}:${minutes} ${ampm}`;
+    }
+
+    function checkConflicts() {
+        courseList.forEach(course => course.isConflicting = false);
         const sortedCourses = courseList.toSorted((a, b) => a.starttime.localeCompare(b.starttime));
-        const conflicts = [];
         for (let i = 1; i < sortedCourses.length; i++) {
             const current = sortedCourses[i];
             const previous = sortedCourses[i - 1];
             // check if this course starts before the previous one ends
             const sharedDay = current.day.some(d => previous.day.includes(d));
             if (sharedDay && (current.starttime < previous.endtime)) {
-                conflicts.push(current, previous);
+                current.isConflicting = true;
+                previous.isConflicting = true;
             }
         } 
-        conflicts.forEach(course => {
-            // Find all cards with this course name
-            cards.forEach(card => {
-                if (card.querySelector('strong').textContent.trim() === course.coursename.trim()) {
-                    card.classList.add('conflicting');
-                }
-            });
-        });
-        console.log("conflicting courses: ", conflicts)
     }
 
     document.getElementById('courseDetailDropdown').addEventListener('change', function() {
