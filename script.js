@@ -8,11 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("current: ",courseList);
 
     //providing the initial course dropdown
-        if (courseList.length!==0){
+        if (courseList.length > 0){
             setTimeout(() => {
                 highlightConflicts();
             }, 0);
-            display()
+            display();
         }
         //create placeholder if there are no courses
         else{
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function display() {
         clearCalendar();
 
-    //providing the updated course dropdown
+        //providing the updated course dropdown
         const detailDropdown = document.getElementById('courseDetailDropdown');
         detailDropdown.options.length = 0; 
         const courseDropdowns = document.getElementsByClassName('courseDropdown');
@@ -115,7 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
         courseList.forEach(course => {
             let opt = new Option(course.coursename, course.coursename);
             dropdown.add(opt);
-
             });
         });
 
@@ -195,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     display();
 
-        function formatTime(timeString) {
+    function formatTime(timeString) {
         if (!timeString) return "";
         
         // split army time into array holding hours and minutes
@@ -210,7 +209,6 @@ document.addEventListener("DOMContentLoaded", () => {
         
         return `${hours}:${minutes} ${ampm}`;
     }
-
 
     function highlightConflicts() {
         const cards = document.querySelectorAll('.course-card');
