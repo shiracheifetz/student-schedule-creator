@@ -9,14 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //providing the initial course dropdown
         if (courseList.length!==0){
-            const dropdowns = document.getElementsByClassName('courseDropdown');
-            Array.from(dropdowns).forEach(dropdown => {
-            courseList.forEach(course => {
-                let opt = new Option(course.coursename, course.coursename);
-                dropdown.add(opt);
-                console.log("set up initial course dropdown")
-            });
-            });
+            setTimeout(() => {
+                highlightConflicts();
+            }, 0);
+            display()
         }
         //create placeholder if there are no courses
         else{
@@ -25,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const placeholder = document.createElement('option');
             placeholder.text = "Not currently enrolled in any courses";
             dropdown.prepend(placeholder);
-            console.log("entered else becuase course list is empty")
+            console.log("entered else because course list is empty")
             }); 
         }
 
@@ -53,8 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             this.reset();
             }); 
-
-            
         };
     
 
@@ -141,11 +135,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     //course card for the schedule display
                     const courseCard = document.createElement('div');
                     courseCard.className = 'course-card';
+                    courseCard.setAttribute('data-name', course.coursename.trim());
                     courseCard.innerHTML = `
                         <strong>${course.coursename}</strong><br>
                         ${course.teacher}<br>
-                        ${course.starttime} - ${course.endtime}
+                        ${formatTime(course.starttime)} - ${formatTime(course.endtime)}
                     `;
+
+                       
 
                     // assign correct day to the course card    
                     dayElement.appendChild(courseCard);
@@ -198,6 +195,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     display();
 
+        function formatTime(timeString) {
+        if (!timeString) return "";
+        
+        // split army time into array holding hours and minutes
+        let [hours, minutes] = timeString.split(':');
+        hours = parseInt(hours);
+        
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        
+        // Convert 
+        hours = hours % 12;
+        hours = hours ? hours : 12; // if hour is 0, make it 12
+        
+        return `${hours}:${minutes} ${ampm}`;
+    }
+
 
     function highlightConflicts() {
         const cards = document.querySelectorAll('.course-card');
@@ -206,24 +219,31 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         const sortedCourses = courseList.toSorted((a, b) => a.starttime.localeCompare(b.starttime));
         const conflicts = [];
-        for (let i = 1; i < sortedCourses.length; i++) {
-            const current = sortedCourses[i];
-            const previous = sortedCourses[i - 1];
-            // check if this course starts before the previous one ends
-            const sharedDay = current.day.some(d => previous.day.includes(d));
-            if (sharedDay && (current.starttime < previous.endtime)) {
-                conflicts.push(current, previous);
+
+        for (let i = 0; i < courseList.length; i++) {
+            for (let j = i + 1; j < courseList.length; j++) {
+                const courseA = courseList[i];
+                const courseB = courseList[j];
+
+                // check days
+                const shareDay = courseA.day.some(d => courseB.day.includes(d));
+                
+                // if days and time overlap
+                if (shareDay && ((courseA.starttime < courseB.endtime) && 
+                                (courseA.endtime > courseB.starttime))) {
+                    conflicts.push(courseA);
+                    conflicts.push(courseB);
+                }
             }
-        } 
+        }
         conflicts.forEach(course => {
-            // Find all cards with this course name
+            // find all cards with this course name
             cards.forEach(card => {
-                if (card.querySelector('strong').textContent.trim() === course.coursename.trim()) {
+                if (card.getAttribute('data-name') === course.coursename.trim()) {
                     card.classList.add('conflicting');
                 }
             });
         });
-        console.log("conflicting courses: ", conflicts)
     }
 
     document.getElementById('courseDetailDropdown').addEventListener('change', function() {
