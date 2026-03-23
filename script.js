@@ -125,9 +125,13 @@ document.addEventListener("DOMContentLoaded", () => {
             courseDetailDropdown.add(opt);
         });
 
-        courseList.forEach(course => {
+        //sort courselist so courses appear in order of starttime
+        const sortedList = courseList.toSorted((a, b) => {
+            return a.starttime.localeCompare(b.starttime);
+        });
+
+        sortedList.forEach(course => {
             normalizeDays(course.day).forEach(day => {
-                //day matches the data-day attribute in the calendar
                 const dayElement = document.querySelector(`.day[data-day="${day}"]`);
                 
                 if (dayElement) {
