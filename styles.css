@@ -198,6 +198,5 @@ button:hover{
 /* Applied when two classes overlap */
 .course-card.conflicting {
     border: 2px solid rgb(253, 9, 9);
-    background-color: #ffeaea;  
     color: rgb(185, 28, 28); 
 }

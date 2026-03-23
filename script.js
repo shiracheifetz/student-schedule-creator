@@ -135,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const courseCard = document.createElement('div');
                     courseCard.className = 'course-card';
                     courseCard.setAttribute('data-name', course.coursename.trim());
+                    courseCard.setAttribute('data-day', day.toLowerCase().trim());
                     courseCard.innerHTML = `
                         <strong>${course.coursename}</strong><br>
                         ${course.teacher}<br>
@@ -205,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // Convert 
         hours = hours % 12;
-        hours = hours ? hours : 12; // if hour is 0, make it 12
+        hours = hours ? hours : 12;
         
         return `${hours}:${minutes} ${ampm}`;
     }
@@ -215,42 +216,35 @@ document.addEventListener("DOMContentLoaded", () => {
         cards.forEach((card) => {
             card.classList.remove("conflicting");
         });
-        const conflicts = [];
+        const conflictKeys = new Set();
 
         for (let i = 0; i < courseList.length; i++) {
             for (let j = i + 1; j < courseList.length; j++) {
                 const courseA = courseList[i];
                 const courseB = courseList[j];
 
-                // check days
-                const shareDay = courseA.day.some(d => courseB.day.includes(d));
-
-
-                console.log(`Checking ${courseA.coursename} vs ${courseB.coursename}`);
-                console.log(`- Shared Day: ${shareDay}`);
-                console.log(`- Start ${courseA.starttime} < End ${courseB.endtime}: ${courseA.starttime < courseB.endtime}`);
-                console.log(`- End ${courseA.endtime} > Start ${courseB.starttime}: ${courseA.endtime > courseB.starttime}`);
+                // find which specific days they both share
+                const sharedDays = courseA.day.filter(d => courseB.day.includes(d));
                 
-                // if days and time overlap
-                if (shareDay && ((courseA.starttime < courseB.endtime) && 
-                                (courseA.endtime > courseB.starttime))) {
-                    if (!conflicts.includes(courseA)){
-                        conflicts.push(courseA);
-                    }
-                    if (!conflicts.includes(courseB)){
-                        conflicts.push(courseB);
-                    }
+                if (sharedDays.length > 0 && (courseA.starttime < courseB.endtime &&
+                                              courseA.endtime > courseB.starttime)) {
+                    sharedDays.forEach(day => {
+                        conflictKeys.add(`${courseA.coursename.trim().toLowerCase()}-${day}`);
+                        conflictKeys.add(`${courseB.coursename.trim().toLowerCase()}-${day}`);
+                    });
                 }
             }
         }
-        console.log("conflicts ", conflicts);
-        conflicts.forEach(course => {
-            // find all cards with this course name
-            cards.forEach(card => {
-                if (card.getAttribute('data-name') === course.coursename.trim()) {
-                    card.classList.add('conflicting');
-                }
-            });
+
+        // only highlight if both day and time match
+        cards.forEach(card => {
+            const name = (card.getAttribute('data-name') || "").trim().toLowerCase();
+            const day = (card.getAttribute('data-day') || "").trim().toLowerCase();
+            const key = `${name}-${day}`;
+
+            if (conflictKeys.has(key)) {
+                card.classList.add('conflicting');
+            }
         });
     }
 
