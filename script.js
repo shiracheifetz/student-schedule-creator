@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (courseList.length > 0){
             setTimeout(() => {
                 highlightConflicts();
-            }, 0);
+            }, 50);
             display();
         }
         //create placeholder if there are no courses
@@ -215,7 +215,6 @@ document.addEventListener("DOMContentLoaded", () => {
         cards.forEach((card) => {
             card.classList.remove("conflicting");
         });
-        const sortedCourses = courseList.toSorted((a, b) => a.starttime.localeCompare(b.starttime));
         const conflicts = [];
 
         for (let i = 0; i < courseList.length; i++) {
@@ -225,15 +224,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 // check days
                 const shareDay = courseA.day.some(d => courseB.day.includes(d));
+
+
+                console.log(`Checking ${courseA.coursename} vs ${courseB.coursename}`);
+                console.log(`- Shared Day: ${shareDay}`);
+                console.log(`- Start ${courseA.starttime} < End ${courseB.endtime}: ${courseA.starttime < courseB.endtime}`);
+                console.log(`- End ${courseA.endtime} > Start ${courseB.starttime}: ${courseA.endtime > courseB.starttime}`);
                 
                 // if days and time overlap
                 if (shareDay && ((courseA.starttime < courseB.endtime) && 
                                 (courseA.endtime > courseB.starttime))) {
-                    conflicts.push(courseA);
-                    conflicts.push(courseB);
+                    if (!conflicts.includes(courseA)){
+                        conflicts.push(courseA);
+                    }
+                    if (!conflicts.includes(courseB)){
+                        conflicts.push(courseB);
+                    }
                 }
             }
         }
+        console.log("conflicts ", conflicts);
         conflicts.forEach(course => {
             // find all cards with this course name
             cards.forEach(card => {
