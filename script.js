@@ -8,15 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("current: ",courseList);
 
     //providing the initial course dropdown
-        if (courseList.length!==0){
-            const dropdowns = document.getElementsByClassName('courseDropdown');
-            Array.from(dropdowns).forEach(dropdown => {
-            courseList.forEach(course => {
-                let opt = new Option(course.coursename, course.coursename);
-                dropdown.add(opt);
-                console.log("set up initial course dropdown")
-            });
-            });
+        if (courseList.length > 0){
+            setTimeout(() => {
+                highlightConflicts();
+            }, 50);
+            display();
         }
         //create placeholder if there are no courses
         else{
@@ -25,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const placeholder = document.createElement('option');
             placeholder.text = "Not currently enrolled in any courses";
             dropdown.prepend(placeholder);
-            console.log("entered else becuase course list is empty")
+            console.log("entered else because course list is empty")
             }); 
         }
 
@@ -53,8 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             this.reset();
             }); 
-
-            
         };
     
 
@@ -84,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         saveAndRender(); 
+        editInput.value = '';
         console.log("Updated course list:", courseList);
     }
         
@@ -103,13 +98,14 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("myCourses", JSON.stringify(courseList));
         console.log("Current List:", courseList);
         display(); 
+        highlightConflicts();
     }
 
 
     function display() {
         clearCalendar();
 
-    //providing the updated course dropdown
+        //providing the updated course dropdown
         const detailDropdown = document.getElementById('courseDetailDropdown');
         detailDropdown.options.length = 0; 
         const courseDropdowns = document.getElementsByClassName('courseDropdown');
@@ -119,31 +115,38 @@ document.addEventListener("DOMContentLoaded", () => {
         courseList.forEach(course => {
             let opt = new Option(course.coursename, course.coursename);
             dropdown.add(opt);
-
             });
         });
 
-//course details dropdown
+        //course details dropdown
         const courseDetailDropdown = document.getElementById('courseDetailDropdown');
         detailList.forEach(detail => {
-        let opt = new Option(detail,detail);
-        courseDetailDropdown.add(opt);
+            let opt = new Option(detail,detail);
+            courseDetailDropdown.add(opt);
         });
 
-        courseList.forEach(course => {
+        //sort courselist so courses appear in order of starttime
+        const sortedList = courseList.toSorted((a, b) => {
+            return a.starttime.localeCompare(b.starttime);
+        });
+
+        sortedList.forEach(course => {
             normalizeDays(course.day).forEach(day => {
-                //day matches the data-day attribute in the calendar
                 const dayElement = document.querySelector(`.day[data-day="${day}"]`);
                 
                 if (dayElement) {
                     //course card for the schedule display
                     const courseCard = document.createElement('div');
                     courseCard.className = 'course-card';
+                    courseCard.setAttribute('data-name', course.coursename.trim());
+                    courseCard.setAttribute('data-day', day.toLowerCase().trim());
                     courseCard.innerHTML = `
                         <strong>${course.coursename}</strong><br>
                         ${course.teacher}<br>
-                        ${course.starttime} - ${course.endtime}
+                        ${formatTime(course.starttime)} - ${formatTime(course.endtime)}
                     `;
+
+                       
 
                     // assign correct day to the course card    
                     dayElement.appendChild(courseCard);
@@ -196,5 +199,68 @@ document.addEventListener("DOMContentLoaded", () => {
 
     display();
 
+    function formatTime(timeString) {
+        if (!timeString) return "";
+        
+        // split army time into array holding hours and minutes
+        let [hours, minutes] = timeString.split(':');
+        hours = parseInt(hours);
+        
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        
+        // Convert 
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        
+        return `${hours}:${minutes} ${ampm}`;
+    }
+
+    function highlightConflicts() {
+        const cards = document.querySelectorAll('.course-card');
+        cards.forEach((card) => {
+            card.classList.remove("conflicting");
+        });
+        const conflictKeys = new Set();
+
+        for (let i = 0; i < courseList.length; i++) {
+            for (let j = i + 1; j < courseList.length; j++) {
+                const courseA = courseList[i];
+                const courseB = courseList[j];
+
+                // find which specific days they both share
+                const sharedDays = courseA.day.filter(d => courseB.day.includes(d));
+                
+                if (sharedDays.length > 0 && (courseA.starttime < courseB.endtime &&
+                                              courseA.endtime > courseB.starttime)) {
+                    sharedDays.forEach(day => {
+                        conflictKeys.add(`${courseA.coursename.trim().toLowerCase()}-${day}`);
+                        conflictKeys.add(`${courseB.coursename.trim().toLowerCase()}-${day}`);
+                    });
+                }
+            }
+        }
+
+        // only highlight if both day and time match
+        cards.forEach(card => {
+            const name = (card.getAttribute('data-name') || "").trim().toLowerCase();
+            const day = (card.getAttribute('data-day') || "").trim().toLowerCase();
+            const key = `${name}-${day}`;
+
+            if (conflictKeys.has(key)) {
+                card.classList.add('conflicting');
+            }
+        });
+    }
+
+    document.getElementById('courseDetailDropdown').addEventListener('change', function() {
+        const editInput = document.getElementById('edit');
+        const prop = this.value.toLowerCase().replace(/\s+/g, '');
+        
+        if (prop === 'starttime' || prop === 'endtime') {
+            editInput.type = 'time';
+        } else {
+            editInput.type = 'text';
+        }
+    });
     
 });
