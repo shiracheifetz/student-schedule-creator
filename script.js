@@ -8,15 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("current: ",courseList);
 
     //providing the initial course dropdown
-        if (courseList.length!==0){
-            const dropdowns = document.getElementsByClassName('courseDropdown');
-            Array.from(dropdowns).forEach(dropdown => {
-            courseList.forEach(course => {
-                let opt = new Option(course.coursename, course.coursename);
-                dropdown.add(opt);
-                console.log("set up initial course dropdown")
-            });
-            });
+        if (courseList.length > 0){
+            setTimeout(() => {
+                highlightConflicts();
+            }, 50);
+            display();
         }
         //create placeholder if there are no courses
         else{
@@ -25,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const placeholder = document.createElement('option');
             placeholder.text = "Not currently enrolled in any courses";
             dropdown.prepend(placeholder);
-            console.log("entered else becuase course list is empty")
+            console.log("entered else because course list is empty")
             }); 
         }
 
@@ -53,8 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             this.reset();
             }); 
-
-            
         };
     
 
@@ -84,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         saveAndRender(); 
+        editInput.value = '';
         console.log("Updated course list:", courseList);
     }
         
@@ -103,13 +98,14 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("myCourses", JSON.stringify(courseList));
         console.log("Current List:", courseList);
         display(); 
+        highlightConflicts();
     }
 
 
     function display() {
         clearCalendar();
 
-    //providing the updated course dropdown
+        //providing the updated course dropdown
         const detailDropdown = document.getElementById('courseDetailDropdown');
         detailDropdown.options.length = 0; 
         const courseDropdowns = document.getElementsByClassName('courseDropdown');
@@ -119,15 +115,14 @@ document.addEventListener("DOMContentLoaded", () => {
         courseList.forEach(course => {
             let opt = new Option(course.coursename, course.coursename);
             dropdown.add(opt);
-
             });
         });
 
-//course details dropdown
+        //course details dropdown
         const courseDetailDropdown = document.getElementById('courseDetailDropdown');
         detailList.forEach(detail => {
-        let opt = new Option(detail,detail);
-        courseDetailDropdown.add(opt);
+            let opt = new Option(detail,detail);
+            courseDetailDropdown.add(opt);
         });
 
         courseList.forEach(course => {
@@ -139,11 +134,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     //course card for the schedule display
                     const courseCard = document.createElement('div');
                     courseCard.className = 'course-card';
+                    courseCard.setAttribute('data-name', course.coursename.trim());
                     courseCard.innerHTML = `
                         <strong>${course.coursename}</strong><br>
                         ${course.teacher}<br>
-                        ${course.starttime} - ${course.endtime}
+                        ${formatTime(course.starttime)} - ${formatTime(course.endtime)}
                     `;
+
+                       
 
                     // assign correct day to the course card    
                     dayElement.appendChild(courseCard);
@@ -196,5 +194,75 @@ document.addEventListener("DOMContentLoaded", () => {
 
     display();
 
+    function formatTime(timeString) {
+        if (!timeString) return "";
+        
+        // split army time into array holding hours and minutes
+        let [hours, minutes] = timeString.split(':');
+        hours = parseInt(hours);
+        
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        
+        // Convert 
+        hours = hours % 12;
+        hours = hours ? hours : 12; // if hour is 0, make it 12
+        
+        return `${hours}:${minutes} ${ampm}`;
+    }
+
+    function highlightConflicts() {
+        const cards = document.querySelectorAll('.course-card');
+        cards.forEach((card) => {
+            card.classList.remove("conflicting");
+        });
+        const conflicts = [];
+
+        for (let i = 0; i < courseList.length; i++) {
+            for (let j = i + 1; j < courseList.length; j++) {
+                const courseA = courseList[i];
+                const courseB = courseList[j];
+
+                // check days
+                const shareDay = courseA.day.some(d => courseB.day.includes(d));
+
+
+                console.log(`Checking ${courseA.coursename} vs ${courseB.coursename}`);
+                console.log(`- Shared Day: ${shareDay}`);
+                console.log(`- Start ${courseA.starttime} < End ${courseB.endtime}: ${courseA.starttime < courseB.endtime}`);
+                console.log(`- End ${courseA.endtime} > Start ${courseB.starttime}: ${courseA.endtime > courseB.starttime}`);
+                
+                // if days and time overlap
+                if (shareDay && ((courseA.starttime < courseB.endtime) && 
+                                (courseA.endtime > courseB.starttime))) {
+                    if (!conflicts.includes(courseA)){
+                        conflicts.push(courseA);
+                    }
+                    if (!conflicts.includes(courseB)){
+                        conflicts.push(courseB);
+                    }
+                }
+            }
+        }
+        console.log("conflicts ", conflicts);
+        conflicts.forEach(course => {
+            // find all cards with this course name
+            cards.forEach(card => {
+                if (card.getAttribute('data-name') === course.coursename.trim()) {
+                    card.classList.add('conflicting');
+                }
+            });
+        });
+    }
+
+    document.getElementById('courseDetailDropdown').addEventListener('change', function() {
+        const editInput = document.getElementById('edit');
+        const prop = this.value.toLowerCase().replace(/\s+/g, '');
+        
+        if (prop === 'starttime' || prop === 'endtime') {
+            editInput.type = 'time';
+        } else {
+            editInput.type = 'text';
+        }
+    });
     
 });

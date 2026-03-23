@@ -29,28 +29,28 @@
                     <div class="form-group">
                         <p>Course Day: </p>
                         <div class="checkbox-group" id="day">
-                        <label><input type="checkbox"  name="day" value="sunday">Sunday</label><br>
+                        <label><input type="checkbox"  name="day" value="sunday">Sunday</label>
 
-                        <label><input type="checkbox"  name="day" value="monday">Monday</label><br>
+                        <label><input type="checkbox"  name="day" value="monday">Monday</label>
                         
-                        <label><input type="checkbox"  name="day" value="tuesday">Tuesday</label><br>
+                        <label><input type="checkbox"  name="day" value="tuesday">Tuesday</label>
                         
-                        <label><input type="checkbox"  name="day" value="wednesday">Wednesday </label><br>
+                        <label><input type="checkbox"  name="day" value="wednesday">Wednesday </label>
                         
-                        <label><input type="checkbox"  name="day" value="thursday">Thursday</label><br>
+                        <label><input type="checkbox"  name="day" value="thursday">Thursday</label>
 
-                        <label><input type="checkbox"  name="day" value="friday">Friday</label><br>
+                        <label><input type="checkbox"  name="day" value="friday">Friday</label>
                         </div>        
                     </div>
 
                     <div class="form-group">
                         <p>Course times: </p>
                         <label for="starttime">Start time: </label>
-                        <input type="time" id="starttime" name="starttime">
+                        <input type="time" id="starttime" name="starttime" required>
                         <small class="error-message" id="startTimeError"></small>
 
                         <label for="endtime">End time: </label>
-                        <input type="time" id="endtime" name="endtime">
+                        <input type="time" id="endtime" name="endtime" required>
                         <small class="error-message" id="endTimeError"></small>
                     </div>
 
@@ -61,21 +61,21 @@
                     <!--delete course-->
                     <h2>Delete a Course</h2>
                     <div class="form-group">
-                        <label for="courses">Choose the course you would like to remove:</label>
-                        <select class="courseDropdown"></select>
+                        <label for="deleteCourse">Choose the course you would like to remove:</label>
+                        <select id="deleteCourse" class="courseDropdown"></select>
                     </div>
                     <div class="form-group">
-                        <button type="submit" id="deleteBtn">Delete</button>
+                        <button type="submit" id="deleteBtn" formnovalidate>Delete</button>
                     </div>
 
                     <!--edit course-->
                     <h2>Edit a Course</h2>
                     <div class="form-group">
-                        <label for="courses">Choose the course you would like to edit:</label>
-                        <select class="courseDropdown"></select>
+                        <label for="editCourse">Choose the course you would like to edit:</label>
+                        <select id="editCourse" class="courseDropdown"></select>
                     </div>
                     <div class="form-group">
-                        <label for="courseDetail">Choose the course detail you would like to edit:</label>
+                        <label for="courseDetailDropdown">Choose the course detail you would like to edit:</label>
                         <select id="courseDetailDropdown">
                             <option>Course Name</option>
                             <option>Teacher</option>
@@ -91,7 +91,7 @@
                         <small class="error-message" id="editError"></small>
                     </div>
                     <div class="form-group">
-                        <button type="submit" id="editBtn">Update</button>
+                        <button type="submit" id="editBtn" formnovalidate>Update</button>
                     </div>
                 </form>
             </div>
